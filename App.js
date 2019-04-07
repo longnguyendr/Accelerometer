@@ -2,12 +2,17 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Accelerometer } from 'expo';
 export default class App extends React.Component {
-  state = {
-    accelerometerData: {},
-    isRunning: false,
-    acceleArray: [],
-    count: 0,
-  }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      accelerometerData: {},
+      isRunning: false,
+      acceleArray: [],
+      count: 0,
+    }
+  };
+  
 
   addToArray  = (accelerometerData) => {
     let {x,y,z} = accelerometerData;
@@ -34,11 +39,16 @@ export default class App extends React.Component {
     let sumAccele = 0;
     for (i=0; i< arr.length; i++) {
       sumAccele += arr[i];
-      // console.log(sum);
       // console.log("array[i]: ", arr[i]);
     }
     let average = sumAccele/arr.length
-    console.log(average);
+    // console.log(average);
+    this.setState({
+      ...this.state, 
+      speed: average,
+    })
+
+
     if (average > 1.4) { 
       this.setState({
         isRunning: true
@@ -98,10 +108,10 @@ export default class App extends React.Component {
 
   render() {
     let { x, y, z } = this.state.accelerometerData;
-
+    // console.log(this.state.speed);
     return (
       <View style={[styles.sensor, this.state.isRunning ? styles.isRunning : styles.isWalking]}>
-        <Text>Accelerometer:</Text>
+        <Text>Accelerometer: {this.state.speed}</Text>
         <Text>x: {round(x)} y: {round(y)} z: {round(z)}</Text>
 
         <View style={styles.buttonContainer}>
